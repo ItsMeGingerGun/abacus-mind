@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "pages/api/*.js",
+      "use": "@vercel/edge"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/public/index.html"
+    },
+    {
+      "src": "/frame",
+      "dest": "/pages/api/frame.js"
+    },
+    {
+      "src": "/auth/callback",
+      "dest": "/pages/api/callback.js"
+    }
+  ]
+}
