@@ -1,5 +1,5 @@
 {
-  "name": "math-frame-game",
+  "name": "abacus-mind",
   "version": "1.0.0",
   "scripts": {
     "dev": "vercel dev",
@@ -7,10 +7,11 @@
     "deploy": "vercel --prod"
   },
   "dependencies": {
-    "@farcaster/auth": "^0.2.1",
+    "@neynar/nodejs-sdk": "^3.1.0",
     "@vercel/kv": "^0.2.0",
-    "next": "^14.1.0",
-    "react": "^18.2.0"
+    "axios": "^1.6.2",
+    "express": "^4.18.2",
+    "next": "^14.1.0"
   },
   "devDependencies": {
     "@vercel/node": "^2.15.3",
