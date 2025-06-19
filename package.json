@@ -1,0 +1,19 @@
+{
+  "name": "math-frame-game",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel start",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@farcaster/auth": "^0.2.1",
+    "@vercel/kv": "^0.2.0",
+    "next": "^14.1.0",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vercel/node": "^2.15.3",
+    "@vercel/edge": "^0.2.0"
+  }
+}
