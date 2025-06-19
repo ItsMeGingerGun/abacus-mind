@@ -1,12 +1,23 @@
-import { FarcasterSignin } from '@farcaster/auth';
+import { NeynarAPIClient } from '@neynar/nodejs-sdk';
+
+const client = new NeynarAPIClient(process.env.FARCASTER_API_KEY);
 
 export default async function handler(req, res) {
-  const { callbackUrl } = req.query;
-  const signin = new FarcasterSignin({
-    clientId: process.env.FARCASTER_CLIENT_ID,
-    redirectUrl: `${process.env.VERCEL_URL}/auth/callback`,
-  });
-
-  const url = signin.getAuthUrl(callbackUrl);
-  res.redirect(url);
+  if (req.method === 'GET') {
+    // Generate auth URL
+    const authUrl = `https://app.neynar.com/login?callback_url=${encodeURIComponent(
+      `${process.env.VERCEL_URL}/api/auth/callback`
+    )}`;
+    res.redirect(authUrl);
+  } else {
+    // Handle callback
+    const { token } = req.query;
+    try {
+      const user = await client.lookupUserByToken(token);
+      res.setHeader('Set-Cookie', `fid=${user.fid}; Path=/; HttpOnly`);
+      res.redirect('/');
+    } catch (error) {
+      res.status(400).json({ error: 'Invalid token' });
+    }
+  }
 }
