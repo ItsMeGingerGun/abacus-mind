@@ -1,29 +1,30 @@
-const questions = new Map();
-const scores = new Map();
+import { DIFFICULTY } from '../../lib/constants';
+import { updateLeaderboard } from '../../lib/db';
 
 export default async function handler(req, res) {
   const { fid, buttonIndex } = req.body.untrustedData;
-
-  // Get current question
-  const currentQ = questions.get(fid) || generateQuestion();
   
-  // Check answer
-  const ops = ['+', '-', '*'];
-  const userAnswer = ops[buttonIndex - 2];
-  const isCorrect = userAnswer === currentQ.correctOp;
+  // Get current game state
+  const gameState = await getGameState(fid);
+  
+  // Handle difficulty selection
+  if (gameState.stage === 'difficulty') {
+    const levels = Object.values(DIFFICULTY);
+    const selected = levels[buttonIndex - 1];
+    await setDifficulty(fid, selected);
+    return res.json(generateQuestionFrame(fid, selected));
+  }
 
-  // Update score
-  const userScore = scores.get(fid) || { correct: 0, total: 0 };
-  userScore.total++;
-  if (isCorrect) userScore.correct++;
-  scores.set(fid, userScore);
-
-  // Generate new question
-  const newQ = generateQuestion();
-  questions.set(fid, newQ);
-
-  // Return next frame
-  res.status(200).json({
-    frame: generateFrame(fid, newQ, userScore),
-  });
+  // Handle answer submission
+  const isCorrect = checkAnswer(gameState, buttonIndex);
+  await updateScore(fid, isCorrect);
+  
+  // Prepare next frame
+  if (gameState.timeLeft <= 0) {
+    const score = await getScore(fid);
+    await updateLeaderboard(fid, score);
+    return res.json(generateResultFrame(fid, score));
+  }
+  
+  res.json(generateQuestionFrame(fid, gameState.difficulty));
 }
