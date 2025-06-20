@@ -1,1 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abacus Mind - Math Challenge on Farcaster</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 50px 0;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: #e0e0ff;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 900px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .card h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #4facfe;
+        }
+        
+        .difficulty-levels {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 600px) {
+            .difficulty-levels {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .level {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .level h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #feb47b;
+        }
+        
+        .level p {
+            font-size: 1rem;
+            color: #ccc;
+        }
+        
+        .play-area {
+            text-align: center;
+        }
+        
+        .fid-input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 50px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.1rem;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.6);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+        }
+        
+        .leaderboard {
+            margin-top: 20px;
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .leaderboard-item .rank {
+            font-weight: bold;
+            color: #4facfe;
+        }
+        
+        .leaderboard-item .score {
+            font-weight: bold;
+            color: #feb47b;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 0 20px;
+            color: #a0a0c0;
+        }
+        
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .share-btn {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            color: white;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Abacus Mind</h1>
+            <p class="subtitle">Test your mental math skills in this fast-paced Farcaster Frame game! Solve arithmetic problems before time runs out and climb the leaderboard.</p>
+        </header>
 
+        <div class="content">
+            <div class="card">
+                <h2>How to Play</h2>
+                <p>You'll see an equation with a missing operator. Choose the correct operation (+, -, ×) to make the equation true. But be quick – you only have a few seconds!</p>
+                
+                <h2>Difficulty Levels</h2>
+                <div class="difficulty-levels">
+                    <div class="level">
+                        <h3>Padawan</h3>
+                        <p>Numbers: 1-10</p>
+                        <p>Time: 20 seconds</p>
+                    </div>
+                    <div class="level">
+                        <h3>Jedi Knight</h3>
+                        <p>Numbers: 5-25</p>
+                        <p>Time: 15 seconds</p>
+                    </div>
+                    <div class="level">
+                        <h3>Jedi Master</h3>
+                        <p>Numbers: 10-50</p>
+                        <p>Time: 10 seconds</p>
+                    </div>
+                </div>
+                
+                <h2>Start Playing</h2>
+                <div class="play-area">
+                    <input type="text" class="fid-input" id="fid-input" placeholder="Enter your Farcaster ID (FID)">
+                    <button class="btn" onclick="startGame()">Play Now</button>
+                    <p>or</p>
+                    <a href="#" class="btn btn-secondary">Sign in with Farcaster</a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Leaderboard</h2>
+                <div class="leaderboard" id="leaderboard">
+                    <div class="leaderboard-item">
+                        <span class="rank">#1</span>
+                        <span class="fid">@mathwizard</span>
+                        <span class="score">850 points</span>
+                    </div>
+                    <div class="leaderboard-item">
+                        <span class="rank">#2</span>
+                        <span class="fid">@numbersguru</span>
+                        <span class="score">720 points</span>
+                    </div>
+                    <div class="leaderboard-item">
+                        <span class="rank">#3</span>
+                        <span class="fid">@calcqueen</span>
+                        <span class="score">680 points</span>
+                    </div>
+                    <div class="leaderboard-item">
+                        <span class="rank">#4</span>
+                        <span class="fid">@arithmetic_ace</span>
+                        <span class="score">650 points</span>
+                    </div>
+                    <div class="leaderboard-item">
+                        <span class="rank">#5</span>
+                        <span class="fid">@mathlete42</span>
+                        <span class="score">620 points</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Share the Game</h2>
+            <div class="share-buttons">
+                <a href="https://warpcast.com/~/compose?text=Check%20out%20Abacus%20Mind%20%E2%80%93%20a%20fun%20math%20game%20on%20Farcaster!&embeds[]=https://abacus-mind.vercel.app" class="share-btn" target="_blank">
+                    <i class="fab fa-farcaster"></i>
+                </a>
+                <a href="https://twitter.com/intent/tweet?text=Check%20out%20Abacus%20Mind%20%E2%80%93%20a%20fun%20math%20game%20on%20Farcaster!%20Play%20at%20https://abacus-mind.vercel.app" class="share-btn" target="_blank">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u=https://abacus-mind.vercel.app" class="share-btn" target="_blank">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+            </div>
+        </div>
+
+        <footer>
+            <p>Built with ❤️ for the Farcaster community | Deployed on Vercel</p>
+        </footer>
+    </div>
+
+    <script>
+        // Function to start the game
+        function startGame() {
+            const fid = document.getElementById('fid-input').value.trim();
+            if (!fid) {
+                alert('Please enter your Farcaster ID (FID)');
+                return;
+            }
+            
+            // In a real implementation, this would redirect to your Frame endpoint
+            alert(`Starting game for FID: ${fid}. In a real implementation, this would launch the Frame.`);
+            
+            // For demo purposes, simulate game start
+            document.getElementById('fid-input').value = '';
+            document.querySelector('.play-area').innerHTML = `
+                <h3>Game Starting...</h3>
+                <p>Imagine the Frame appearing here with your first math challenge!</p>
+                <p>You would see: <strong>8 ? 3 = 24</strong></p>
+                <div style="display: flex; gap: 10px; justify-content: center; margin: 20px 0;">
+                    <button class="btn" style="padding: 10px 20px;">+</button>
+                    <button class="btn" style="padding: 10px 20px;">-</button>
+                    <button class="btn" style="padding: 10px 20px;">×</button>
+                </div>
+                <p>Time remaining: <strong id="countdown">15</strong> seconds</p>
+            `;
+            
+            // Start countdown timer
+            let timeLeft = 15;
+            const countdownEl = document.getElementById('countdown');
+            const timer = setInterval(() => {
+                timeLeft--;
+                countdownEl.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    document.querySelector('.play-area').innerHTML = `
+                        <h3>Time's Up!</h3>
+                        <p>Your score: 250 points</p>
+                        <button class="btn" onclick="location.reload()">Play Again</button>
+                    `;
+                }
+            }, 1000);
+        }
+        
+        // In a real implementation, this would fetch the leaderboard from your API
+        function loadLeaderboard() {
+            // This would make a fetch request to your /api/leaderboard endpoint
+            console.log('Loading leaderboard data...');
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Focus on FID input
+            document.getElementById('fid-input').focus();
+            
+            // Load leaderboard data
+            loadLeaderboard();
+        });
+    </script>
+</body>
+</html>
