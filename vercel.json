@@ -8,5 +8,9 @@
       "src": "/api/leaderboard",
       "dest": "/api/leaderboard.js"
     }
+    {
+      "src": "/timeout-image",
+      "dest": "/api/timeout-image.js"
+    }
   ]
 }
