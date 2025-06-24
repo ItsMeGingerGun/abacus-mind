@@ -20,7 +20,20 @@ export default async function handler(req) {
   
   // Start the timer for this user
   startTimer(fid, () => handleTimeout(fid));
-  
+
+  // Proper state serialization
+const state = {
+  question: {
+    num1: question.num1,
+    num2: question.num2,
+    num3: question.num3,
+    correctOp: question.correctOp
+  },
+  difficulty,
+  timestamp: Date.now()  // For timeout calculation
+};
+
+const stateString = encodeURIComponent(JSON.stringify(state));
   // Generate the frame HTML
   const html = `
     <!DOCTYPE html>
