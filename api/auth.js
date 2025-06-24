@@ -1,6 +1,8 @@
 import { NeynarAPIClient } from '@neynar/nodejs-sdk';
 
-const client = new NeynarAPIClient(process.env.FARCASTER_API_KEY);
+import { getConfig } from '../lib/config';
+const { farcasterApiKey } = getConfig();
+const client = new NeynarAPIClient(farcasterApiKey);
 
 export default async function handler(req, res) {
   if (req.method === 'GET') {
