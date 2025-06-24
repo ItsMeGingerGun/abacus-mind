@@ -1,50 +1,39 @@
 import { NextResponse } from 'next/server';
-import { DIFFICULTY } from '../../lib/constants';
-import { startTimer } from '../../api/timeout';
-
-export default async function handler(req) {
-  const fid = req.nextUrl.searchParams.get('fid');
-  const difficulty = getDifficulty(fid); // Implement user preference storage
-  
-  const question = generateQuestion(difficulty);
-  startTimer(fid, difficulty, () => handleTimeout(fid));
-
-  return new NextResponse(`
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta property="fc:frame" content="vNext" />
-        <meta property="fc:frame:post_url" content="${process.env.VERCEL_URL}/handle?fid=${fid}" />
-        <meta property="fc:frame:button:1" content="${question.num1} ? ${question.num2} = ${question.num3}" />
-        <meta property="fc:frame:button:2" content="+" />
-        <meta property="fc:frame:button:3" content="-" />
-        <meta property="fc:frame:button:4" content="×" />
-        <meta property="fc:frame:state" content="${JSON.stringify({ difficulty: difficulty.name })}" />
-        <meta property="og:title" content="Abacus Mind - ${difficulty.name} Mode" />
-      </head>
-    </html>
-  `);
-}
+import { getConfig } from '../../lib/config';
+import { generateQuestion } from '../../lib/gameLogic';
+import { startTimer } from '../../lib/timekeeper';
 
 export const config = {
   runtime: 'edge',
 };
 
 export default async function handler(req) {
-  const fid = req.nextUrl.searchParams.get('fid');
-  const question = generateQuestion();
+  const url = new URL(req.url);
+  const fid = url.searchParams.get('fid');
+  const difficulty = url.searchParams.get('difficulty') || 'NOVICE';
   
+  // Get configuration
+  const { baseUrl } = getConfig();
+  
+  // Generate a new question
+  const question = generateQuestion(difficulty);
+  
+  // Start the timer for this user
+  startTimer(fid, () => handleTimeout(fid));
+  
+  // Generate the frame HTML
   const html = `
     <!DOCTYPE html>
     <html>
       <head>
         <meta property="fc:frame" content="vNext" />
-        <meta property="fc:frame:post_url" content="${process.env.VERCEL_URL}/handle?fid=${fid}" />
+        <meta property="fc:frame:post_url" content="${baseUrl}/api/game?fid=${fid}&difficulty=${difficulty}" />
         <meta property="fc:frame:button:1" content="${question.num1} ? ${question.num2} = ${question.num3}" />
         <meta property="fc:frame:button:2" content="+" />
         <meta property="fc:frame:button:3" content="-" />
         <meta property="fc:frame:button:4" content="×" />
-        <meta property="og:title" content="Math Challenge" />
+        <meta property="og:title" content="Abacus Mind Math Challenge" />
+        <meta property="fc:frame:state" content="${JSON.stringify({ question })}" />
       </head>
     </html>
   `;
@@ -52,16 +41,9 @@ export default async function handler(req) {
   return new NextResponse(html);
 }
 
-function generateQuestion() {
-  const ops = ['+', '-', '*'];
-  const op = ops[Math.floor(Math.random() * 3)];
-  const num1 = Math.floor(Math.random() * 10) + 1;
-  const num2 = Math.floor(Math.random() * 10) + 1;
-  
-  let num3;
-  if (op === '+') num3 = num1 + num2;
-  if (op === '-') num3 = num1 - num2;
-  if (op === '*') num3 = num1 * num2;
-
-  return { num1, num2, num3, correctOp: op };
+// Handle timeout scenario
+async function handleTimeout(fid) {
+  // In a real implementation, this would update game state
+  console.log(`Timeout for user ${fid}`);
+  // Would typically: mark answer as wrong, update score, show results
 }
