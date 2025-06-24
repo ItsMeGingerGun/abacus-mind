@@ -13,31 +13,77 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
+        :root {
+            --primary: #4a00e0;
+            --secondary: #8e2de2;
+            --accent: #00c9ff;
+            --dark: #1a1a2e;
+            --darker: #0d0d1a;
+            --light: #f0f0ff;
+            --success: #4ade80;
+            --warning: #f87171;
+        }
+        
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
-            color: #fff;
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: var(--light);
             min-height: 100vh;
             padding: 20px;
             line-height: 1.6;
+            overflow-x: hidden;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
+            position: relative;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration, 5s) infinite ease-in-out;
+            opacity: var(--opacity, 0.7);
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
         }
         
         header {
             text-align: center;
-            padding: 50px 0;
+            padding: 50px 0 30px;
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(74, 0, 224, 0.5));
         }
         
         h1 {
             font-size: 3.5rem;
-            margin-bottom: 20px;
-            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 2px 10px rgba(142, 45, 226, 0.3);
         }
         
         .subtitle {
@@ -45,12 +91,14 @@
             color: #e0e0ff;
             max-width: 800px;
             margin: 0 auto 30px;
+            font-weight: 300;
         }
         
         .content {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
+            margin-bottom: 40px;
         }
         
         @media (max-width: 900px) {
@@ -60,18 +108,33 @@
         }
         
         .card {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(142, 45, 226, 0.2);
         }
         
         .card h2 {
             font-size: 2rem;
             margin-bottom: 20px;
-            color: #4facfe;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card h2 i {
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
         .difficulty-levels {
@@ -88,45 +151,79 @@
         }
         
         .level {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 15px;
             padding: 20px;
             text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .level:hover {
+            border-color: var(--accent);
+            background: rgba(74, 0, 224, 0.2);
         }
         
         .level h3 {
             font-size: 1.5rem;
             margin-bottom: 10px;
-            color: #feb47b;
+            color: var(--accent);
         }
         
         .level p {
             font-size: 1rem;
             color: #ccc;
+            margin: 5px 0;
+        }
+        
+        .level .badge {
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: inline-block;
         }
         
         .play-area {
             text-align: center;
+            padding: 20px 0;
+        }
+        
+        .fid-input-container {
+            position: relative;
+            margin: 25px 0;
         }
         
         .fid-input {
             width: 100%;
-            padding: 15px;
+            padding: 16px 20px;
             border-radius: 50px;
-            border: none;
-            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             color: white;
             font-size: 1.1rem;
-            margin: 20px 0;
             text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .fid-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(0, 201, 255, 0.3);
+        }
+        
+        .fid-input::placeholder {
+            color: #a0a0c0;
         }
         
         .btn {
             display: inline-block;
-            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
             color: white;
             border: none;
-            padding: 15px 40px;
+            padding: 16px 45px;
             font-size: 1.2rem;
             border-radius: 50px;
             cursor: pointer;
@@ -135,6 +232,20 @@
             text-decoration: none;
             box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
             margin: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 20px;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(25deg);
+            transition: all 0.6s ease;
         }
         
         .btn:hover {
@@ -142,214 +253,505 @@
             box-shadow: 0 8px 20px rgba(79, 172, 254, 0.6);
         }
         
+        .btn:hover:after {
+            left: 120%;
+        }
+        
         .btn-secondary {
-            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
         }
         
         .leaderboard {
             margin-top: 20px;
         }
         
+        .leaderboard-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: rgba(74, 0, 224, 0.3);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
         .leaderboard-item {
             display: flex;
             justify-content: space-between;
-            padding: 15px;
+            padding: 15px 20px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             margin-bottom: 10px;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .leaderboard-item:hover {
+            background: rgba(74, 0, 224, 0.2);
+            transform: translateX(5px);
         }
         
         .leaderboard-item .rank {
             font-weight: bold;
-            color: #4facfe;
+            color: var(--accent);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 201, 255, 0.1);
+            border-radius: 50%;
+        }
+        
+        .leaderboard-item .fid {
+            flex-grow: 1;
+            padding: 0 20px;
+            text-align: left;
         }
         
         .leaderboard-item .score {
             font-weight: bold;
+            color: var(--accent);
+            background: rgba(0, 201, 255, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+        
+        .leaderboard-item .difficulty {
+            font-size: 0.9rem;
             color: #feb47b;
+            margin-left: 15px;
+        }
+        
+        .game-preview {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .preview-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            width: 280px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .preview-card img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .preview-card h4 {
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+        }
+        
+        .instructions h3 {
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions ol {
+            padding-left: 25px;
+            line-height: 1.8;
+        }
+        
+        .instructions li {
+            margin-bottom: 15px;
+            padding-left: 10px;
+            position: relative;
+        }
+        
+        .instructions li:before {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 10px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+        
+        .highlight {
+            background: rgba(0, 201, 255, 0.2);
+            padding: 3px 10px;
+            border-radius: 5px;
+            font-weight: 500;
+            color: var(--accent);
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 25px;
+            justify-content: center;
+        }
+        
+        .tech-item {
+            background: rgba(255, 255, 255, 0.07);
+            padding: 12px 25px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .tech-item:hover {
+            transform: translateY(-3px);
+            background: rgba(0, 201, 255, 0.15);
+        }
+        
+        .tech-item img {
+            width: 28px;
+            height: 28px;
         }
         
         footer {
             text-align: center;
             padding: 40px 0 20px;
             color: #a0a0c0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 30px;
         }
         
         .share-buttons {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
+            gap: 20px;
+            margin: 30px 0;
         }
         
         .share-btn {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            line-height: 50px;
-            text-align: center;
+            border-radius: 50px;
+            padding: 12px 25px;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1rem;
             transition: all 0.3s;
+            text-decoration: none;
+            gap: 10px;
         }
         
         .share-btn:hover {
             transform: translateY(-3px);
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(0, 201, 255, 0.2);
+        }
+        
+        .loader {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .btn {
+                padding: 14px 35px;
+                font-size: 1.1rem;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="stars" id="stars-container"></div>
+    
     <div class="container">
         <header>
+            <div class="logo">
+                <i class="fas fa-calculator"></i>
+            </div>
             <h1>Abacus Mind</h1>
-            <p class="subtitle">Test your mental math skills in this fast-paced Farcaster Frame game! Solve arithmetic problems before time runs out and climb the leaderboard.</p>
+            <p class="subtitle">Master mental math in this fast-paced Farcaster Frame game! Solve arithmetic challenges against the clock and climb the leaderboard.</p>
         </header>
 
         <div class="content">
             <div class="card">
-                <h2>How to Play</h2>
-                <p>You'll see an equation with a missing operator. Choose the correct operation (+, -, ×) to make the equation true. But be quick – you only have a few seconds!</p>
+                <h2><i class="fas fa-gamepad"></i> How to Play</h2>
+                <p>You'll see an equation with a missing operator. Quickly choose the correct operation (+, -, ×) to make the equation true before time runs out!</p>
                 
-                <h2>Difficulty Levels</h2>
-                <div class="difficulty-levels">
-                    <div class="level">
-                        <h3>Padawan</h3>
-                        <p>Numbers: 1-10</p>
-                        <p>Time: 20 seconds</p>
+                <div class="game-preview">
+                    <div class="preview-card">
+                        <div style="background:#1a1a2e; border-radius:10px; padding:20px; font-size:1.5rem;">
+                            8 ? 3 = 24
+                        </div>
+                        <h4>Problem</h4>
+                        <p>Find the missing operator</p>
                     </div>
-                    <div class="level">
-                        <h3>Jedi Knight</h3>
-                        <p>Numbers: 5-25</p>
-                        <p>Time: 15 seconds</p>
+                    
+                    <div class="preview-card">
+                        <div style="display:flex; gap:10px; justify-content:center; margin:10px 0;">
+                            <button style="background:#00c9ff; color:white; border:none; width:50px; height:50px; border-radius:10px; font-size:1.2rem;">+</button>
+                            <button style="background:#00c9ff; color:white; border:none; width:50px; height:50px; border-radius:10px; font-size:1.2rem;">-</button>
+                            <button style="background:#8e2de2; color:white; border:none; width:50px; height:50px; border-radius:10px; font-size:1.2rem;">×</button>
+                        </div>
+                        <h4>Solution</h4>
+                        <p>Select multiplication</p>
                     </div>
-                    <div class="level">
-                        <h3>Jedi Master</h3>
-                        <p>Numbers: 10-50</p>
-                        <p>Time: 10 seconds</p>
+                    
+                    <div class="preview-card">
+                        <div style="background:#1a1a2e; border-radius:10px; padding:15px; font-size:1rem;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                                <span>Time left:</span>
+                                <span style="color:#00c9ff;">12s</span>
+                            </div>
+                            <div style="height:8px; background:rgba(255,255,255,0.1); border-radius:4px;">
+                                <div style="height:100%; width:60%; background:#00c9ff; border-radius:4px;"></div>
+                            </div>
+                        </div>
+                        <h4>Timer</h4>
+                        <p>Solve before time runs out!</p>
                     </div>
                 </div>
                 
-                <h2>Start Playing</h2>
+                <h2><i class="fas fa-chess-king"></i> Difficulty Levels</h2>
+                <div class="difficulty-levels">
+                    <div class="level">
+                        <h3>Padawan</h3>
+                        <p><i class="fas fa-numbers"></i> Numbers: 1-10</p>
+                        <p><i class="fas fa-clock"></i> Time: 20 seconds</p>
+                        <p><i class="fas fa-star"></i> Score Multiplier: 1x</p>
+                        <div class="badge">Beginner</div>
+                    </div>
+                    <div class="level">
+                        <h3>Jedi Knight</h3>
+                        <p><i class="fas fa-numbers"></i> Numbers: 5-25</p>
+                        <p><i class="fas fa-clock"></i> Time: 15 seconds</p>
+                        <p><i class="fas fa-star"></i> Score Multiplier: 2x</div>
+                        <div class="badge">Intermediate</div>
+                    </div>
+                    <div class="level">
+                        <h3>Jedi Master</h3>
+                        <p><i class="fas fa-numbers"></i> Numbers: 10-50</p>
+                        <p><i class="fas fa-clock"></i> Time: 10 seconds</p>
+                        <p><i class="fas fa-star"></i> Score Multiplier: 3x</p>
+                        <div class="badge">Expert</div>
+                    </div>
+                </div>
+                
+                <h2><i class="fas fa-play-circle"></i> Start Playing</h2>
                 <div class="play-area">
-                    <input type="text" class="fid-input" id="fid-input" placeholder="Enter your Farcaster ID (FID)">
-                    <button class="btn" onclick="startGame()">Play Now</button>
-                    <p>or</p>
-                    <a href="#" class="btn btn-secondary">Sign in with Farcaster</a>
+                    <div class="fid-input-container">
+                        <input type="text" class="fid-input" id="fid-input" placeholder="Enter your Farcaster ID (FID)">
+                    </div>
+                    <button class="btn" onclick="startGame()">
+                        <i class="fas fa-play"></i> Play Now
+                    </button>
+                    <p style="margin:20px 0 10px; color:#a0a0c0;">or</p>
+                    <a href="#" class="btn btn-secondary" onclick="signInWithFarcaster()">
+                        <i class="fas fa-lock"></i> Sign in with Farcaster
+                    </a>
                 </div>
             </div>
             
             <div class="card">
-                <h2>Leaderboard</h2>
+                <h2><i class="fas fa-trophy"></i> Leaderboard</h2>
+                <div class="leaderboard-header">
+                    <span>Player</span>
+                    <span>Score</span>
+                </div>
                 <div class="leaderboard" id="leaderboard">
                     <div class="leaderboard-item">
-                        <span class="rank">#1</span>
-                        <span class="fid">@mathwizard</span>
-                        <span class="score">850 points</span>
+                        <div class="rank">1</div>
+                        <div class="fid">@mathwizard</div>
+                        <div class="score">850</div>
+                        <div class="difficulty">Jedi Master</div>
                     </div>
                     <div class="leaderboard-item">
-                        <span class="rank">#2</span>
-                        <span class="fid">@numbersguru</span>
-                        <span class="score">720 points</span>
+                        <div class="rank">2</div>
+                        <div class="fid">@numbersguru</div>
+                        <div class="score">720</div>
+                        <div class="difficulty">Jedi Knight</div>
                     </div>
                     <div class="leaderboard-item">
-                        <span class="rank">#3</span>
-                        <span class="fid">@calcqueen</span>
-                        <span class="score">680 points</span>
+                        <div class="rank">3</div>
+                        <div class="fid">@calcqueen</div>
+                        <div class="score">680</div>
+                        <div class="difficulty">Jedi Master</div>
                     </div>
                     <div class="leaderboard-item">
-                        <span class="rank">#4</span>
-                        <span class="fid">@arithmetic_ace</span>
-                        <span class="score">650 points</span>
+                        <div class="rank">4</div>
+                        <div class="fid">@arithmetic_ace</div>
+                        <div class="score">650</div>
+                        <div class="difficulty">Padawan</div>
                     </div>
                     <div class="leaderboard-item">
-                        <span class="rank">#5</span>
-                        <span class="fid">@mathlete42</span>
-                        <span class="score">620 points</span>
+                        <div class="rank">5</div>
+                        <div class="fid">@mathlete42</div>
+                        <div class="score">620</div>
+                        <div class="difficulty">Jedi Knight</div>
                     </div>
+                </div>
+                
+                <div class="instructions">
+                    <h3><i class="fas fa-info-circle"></i> How to Play</h3>
+                    <ol>
+                        <li>Select your difficulty level: <span class="highlight">Padawan</span>, <span class="highlight">Jedi Knight</span>, or <span class="highlight">Jedi Master</span></li>
+                        <li>Solve the equation: <span class="highlight">[num1] ? [num2] = [num3]</span></li>
+                        <li>Choose the correct operation (<span class="highlight">+</span>, <span class="highlight">-</span>, <span class="highlight">×</span>) before time runs out</li>
+                        <li>Earn more points for harder difficulties and faster solves</li>
+                        <li>Compete for the top spot on the leaderboard!</li>
+                    </ol>
                 </div>
             </div>
         </div>
 
         <div class="card">
-            <h2>Share the Game</h2>
+            <h2><i class="fas fa-share-alt"></i> Share the Game</h2>
             <div class="share-buttons">
                 <a href="https://warpcast.com/~/compose?text=Check%20out%20Abacus%20Mind%20%E2%80%93%20a%20fun%20math%20game%20on%20Farcaster!&embeds[]=https://abacus-mind.vercel.app" class="share-btn" target="_blank">
-                    <i class="fab fa-farcaster"></i>
+                    <i class="fab fa-farcaster"></i> Share on Warpcast
                 </a>
                 <a href="https://twitter.com/intent/tweet?text=Check%20out%20Abacus%20Mind%20%E2%80%93%20a%20fun%20math%20game%20on%20Farcaster!%20Play%20at%20https://abacus-mind.vercel.app" class="share-btn" target="_blank">
-                    <i class="fab fa-twitter"></i>
-                </a>
-                <a href="https://www.facebook.com/sharer/sharer.php?u=https://abacus-mind.vercel.app" class="share-btn" target="_blank">
-                    <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-twitter"></i> Share on Twitter
                 </a>
             </div>
         </div>
 
+        <div class="card">
+            <h2><i class="fas fa-code"></i> Technical Stack</h2>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <i class="fab fa-node-js" style="color:#68a063;"></i> Node.js
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-server" style="color:#4479a1;"></i> Express
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-farcaster" style="color:#8a63d2;"></i> Farcaster Frames
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-database" style="color:#5d8fc2;"></i> Vercel KV
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-cloud" style="color:#00c9ff;"></i> Vercel
+                </div>
+            </div>
+        </div>
+
         <footer>
-            <p>Built with ❤️ for the Farcaster community | Deployed on Vercel</p>
+            <p>Built with ❤️ for the Farcaster community | Securely deployed on Vercel</p>
+            <p style="margin-top:10px; font-size:0.9rem;">© 2023 Abacus Mind. All rights reserved.</p>
         </footer>
     </div>
 
     <script>
+        // Create stars background
+        function createStars() {
+            const container = document.getElementById('stars-container');
+            const starCount = 150;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random properties
+                const size = Math.random() * 3;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const opacity = 0.1 + Math.random() * 0.9;
+                const duration = 2 + Math.random() * 8;
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${posX}%`;
+                star.style.top = `${posY}%`;
+                star.style.opacity = opacity;
+                star.style.setProperty('--duration', `${duration}s`);
+                
+                container.appendChild(star);
+            }
+        }
+        
         // Function to start the game
         function startGame() {
             const fid = document.getElementById('fid-input').value.trim();
-            if (!fid) {
-                alert('Please enter your Farcaster ID (FID)');
+            if (!fid || !/^\d+$/.test(fid)) {
+                alert('Please enter a valid Farcaster ID (numbers only)');
                 return;
             }
             
-            // In a real implementation, this would redirect to your Frame endpoint
-            alert(`Starting game for FID: ${fid}. In a real implementation, this would launch the Frame.`);
-            
-            // For demo purposes, simulate game start
-            document.getElementById('fid-input').value = '';
-            document.querySelector('.play-area').innerHTML = `
-                <h3>Game Starting...</h3>
-                <p>Imagine the Frame appearing here with your first math challenge!</p>
-                <p>You would see: <strong>8 ? 3 = 24</strong></p>
-                <div style="display: flex; gap: 10px; justify-content: center; margin: 20px 0;">
-                    <button class="btn" style="padding: 10px 20px;">+</button>
-                    <button class="btn" style="padding: 10px 20px;">-</button>
-                    <button class="btn" style="padding: 10px 20px;">×</button>
-                </div>
-                <p>Time remaining: <strong id="countdown">15</strong> seconds</p>
+            // Show loading state
+            const playArea = document.querySelector('.play-area');
+            playArea.innerHTML = `
+                <div class="loader"></div>
+                <p style="margin-top:20px;">Launching Abacus Mind...</p>
             `;
             
-            // Start countdown timer
-            let timeLeft = 15;
-            const countdownEl = document.getElementById('countdown');
-            const timer = setInterval(() => {
-                timeLeft--;
-                countdownEl.textContent = timeLeft;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    document.querySelector('.play-area').innerHTML = `
-                        <h3>Time's Up!</h3>
-                        <p>Your score: 250 points</p>
-                        <button class="btn" onclick="location.reload()">Play Again</button>
-                    `;
-                }
-            }, 1000);
+            // Simulate API call
+            setTimeout(() => {
+                // In a real implementation, this would redirect to the Frame
+                window.location.href = `/api/frame?fid=${fid}`;
+            }, 1500);
         }
         
-        // In a real implementation, this would fetch the leaderboard from your API
-        function loadLeaderboard() {
-            // This would make a fetch request to your /api/leaderboard endpoint
-            console.log('Loading leaderboard data...');
+        // Function to sign in with Farcaster
+        function signInWithFarcaster() {
+            const playArea = document.querySelector('.play-area');
+            playArea.innerHTML = `
+                <div class="loader"></div>
+                <p style="margin-top:20px;">Connecting to Farcaster...</p>
+            `;
+            
+            // Simulate authentication flow
+            setTimeout(() => {
+                // In a real implementation, this would initiate Farcaster auth
+                document.querySelector('.play-area').innerHTML = `
+                    <p style="margin:20px 0;">Successfully connected!</p>
+                    <button class="btn" onclick="startGame()">
+                        <i class="fas fa-play"></i> Start Playing
+                    </button>
+                `;
+            }, 2000);
         }
         
         // Initialize on load
         document.addEventListener('DOMContentLoaded', () => {
-            // Focus on FID input
+            createStars();
             document.getElementById('fid-input').focus();
-            
-            // Load leaderboard data
-            loadLeaderboard();
         });
     </script>
 </body>
