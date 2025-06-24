@@ -41,6 +41,23 @@ export default async function handler(req) {
   
   // Generate next question
   const nextQuestion = generateQuestion(difficulty);
+
+  // Calculate elapsed time
+const elapsed = Date.now() - state.timestamp;
+const timeLimit = DIFFICULTY[state.difficulty].time * 1000;
+
+if (elapsed > timeLimit) {
+  return new NextResponse(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta property="fc:frame" content="vNext" />
+        <meta property="fc:frame:image" content="${baseUrl}/timeout-image" />
+        <meta property="fc:frame:button:1" content="Time's Up! Play Again" />
+      </head>
+    </html>
+  `);
+}
   
   // Prepare response
   const html = `
