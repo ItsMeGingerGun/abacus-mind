@@ -6,17 +6,17 @@ Test your mental math skills under pressure with 3 difficulty levels:
 2. **Jedi Knight** (Medium): Numbers 5-25, 15 seconds  
 3. **Jedi Master** (Hard): Numbers 10-50, 10 seconds
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/abacus-mind)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ItsMeGingerGun/abacus-mind)
 
 ## Features
-- ⏱️ Time pressure with automatic submission
-- 🏆 Persistent leaderboard
-- 🌟 Star Wars-themed difficulty levels
-- 📢 Built-in score sharing
-- 🔐 Farcaster login
+- Secure Farcaster authentication
+- Three difficulty levels (Padawan, Jedi Knight, Jedi Master)
+- Live leaderboard with Vercel KV
+- Time-pressured math challenges
+- Social score sharing
 
-## How to Play
-1. Choose difficulty level
-2. Solve: `[num1] ? [num2] = [num3]`
-3. Select correct operation (+, -, ×)
-4. Share your score!
+## Local Development
+```bash
+cp .env.example .env.local
+npm install
+npm run dev
