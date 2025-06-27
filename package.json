@@ -19,9 +19,9 @@
   }
   {
   "name": "abacus-mind",
-  "type": "module", // Add this line
+  "type": "module", 
   "engines": {
-    "node": "18.x" // Specify Node version
+    "node": "18.x" 
   }
 }
 }
