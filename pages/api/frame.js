@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getConfig } from '../../lib/config';
-import { generateQuestion } from '../../lib/gameLogic';
-import { startTimer } from '../../lib/timekeeper';
-import { saveGameState } from '../../lib/db';
+const { saveGameState } = require('../../lib/db');
+const { generateQuestion } = require('../../lib/gameLogic');
+const { startTimer } = require('../../lib/timekeeper');
 
 export const config = {
   runtime: 'edge',
