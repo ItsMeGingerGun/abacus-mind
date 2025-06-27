@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
 import { getConfig } from '../../lib/config';
-import { generateQuestion } from '../../lib/gameLogic';
 import { clearTimer, startTimer } from '../../lib/timekeeper';
 import { updateScore, getScore } from '../../lib/db';
-import { DIFFICULTY } from '../../lib/constants';
-import { getGameState, saveGameState, updateScore } from '../lib/db';
-
+const { getGameState, saveGameState, updateScore } = require('../lib/db');
+const { generateQuestion, checkAnswer } = require('../lib/gameLogic');
+const { DIFFICULTY } = require('../lib/constants');
 
 
 export default async function handler(req, res) {
