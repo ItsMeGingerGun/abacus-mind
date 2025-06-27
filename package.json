@@ -17,4 +17,11 @@
     "@vercel/node": "^2.15.3",
     "@vercel/edge": "^0.2.0"
   }
+  {
+  "name": "abacus-mind",
+  "type": "module", // Add this line
+  "engines": {
+    "node": "18.x" // Specify Node version
+  }
+}
 }
