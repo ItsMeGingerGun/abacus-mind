@@ -10,31 +10,25 @@
       "use": "@vercel/node"
     }
   ],
-  "routes": [
-    {
-      "src": "/",
-      "dest": "/public/index.html"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "api/$1.js"
-    },
-    {
-      "src": "/api/game",
-      "dest": "api/game.js"
-    },
-    {
-      "src": "/api/leaderboard",
-      "dest": "pages/api/leaderboard.js"
-    },
-    {
-      "src": "/api/frame",
-      "dest": "pages/api/frame.js"
-    }
-  ],
   "rewrites": [
     {
-      "source": "/:path*",
+      "source": "/",
+      "destination": "/public/index.html"
+    },
+    {
+      "source": "/api/game",
+      "destination": "/api/game.js"
+    },
+    {
+      "source": "/api/leaderboard",
+      "destination": "/pages/api/leaderboard.js"
+    },
+    {
+      "source": "/api/frame",
+      "destination": "/pages/api/frame.js"
+    },
+    {
+      "source": "/(.*)",
       "destination": "/public/index.html"
     }
   ]
