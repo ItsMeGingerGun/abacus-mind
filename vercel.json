@@ -1,20 +1,4 @@
 {
-  "routes": [
-    {
-      "src": "/api/auth/check",
-      "dest": "/api/auth/check.js"
-    },
-    {
-      "src": "/api/leaderboard",
-      "dest": "/api/leaderboard.js"
-    }
-    {
-      "src": "/timeout-image",
-      "dest": "/api/timeout-image.js"
-    }
-  ]
-}
-{
   "version": 2,
   "builds": [
     {
@@ -38,6 +22,18 @@
     {
       "src": "/",
       "dest": "/public/index.html"
+    }
+    {
+      "src": "/api/auth/check",
+      "dest": "/api/auth/check.js"
+    },
+    {
+      "src": "/api/leaderboard",
+      "dest": "/api/leaderboard.js"
+    }
+    {
+      "src": "/timeout-image",
+      "dest": "/api/timeout-image.js"
     }
   ]
 }
