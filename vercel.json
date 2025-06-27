@@ -16,7 +16,7 @@
       "destination": "/public/index.html"
     },
     {
-      "source": "/",
+      "source": "/api/game",
       "destination": "/api/game.js"
     },
     {
