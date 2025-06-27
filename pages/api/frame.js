@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getConfig } from '../../lib/config';
 import { generateQuestion } from '../../lib/gameLogic';
 import { startTimer } from '../../lib/timekeeper';
+import { saveGameState } from '../../lib/db';
 
 export const config = {
   runtime: 'edge',
@@ -32,6 +33,12 @@ const state = {
   difficulty,
   timestamp: Date.now()  // For timeout calculation
 };
+
+  await saveGameState(fid, {
+    difficulty,
+    score: 0,
+    currentQuestion: question
+  });
 
 const stateString = encodeURIComponent(JSON.stringify(state));
   // Generate the frame HTML
