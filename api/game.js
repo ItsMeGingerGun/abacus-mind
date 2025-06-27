@@ -6,9 +6,7 @@ import { updateScore, getScore } from '../../lib/db';
 import { DIFFICULTY } from '../../lib/constants';
 import { getGameState, saveGameState, updateScore } from '../lib/db';
 
-export const config = {
-  runtime: 'edge',
-};
+
 
 export default async function handler(req, res) {
   const url = new URL(req.url);
@@ -111,5 +109,6 @@ if (elapsed > timeLimit) {
     </html>
   `;
 
-  return new NextResponse(html);
+  res.setHeader('Content-Type', 'text/html');
+res.send(html);
 }
