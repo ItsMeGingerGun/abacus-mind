@@ -58,7 +58,8 @@ const stateString = encodeURIComponent(JSON.stringify(state));
     </html>
   `;
 
-  return new NextResponse(html);
+ res.setHeader('Content-Type', 'text/html');
+res.send(html);
 }
 
 // Handle timeout scenario
