@@ -4,12 +4,13 @@ import { generateQuestion } from '../../lib/gameLogic';
 import { clearTimer, startTimer } from '../../lib/timekeeper';
 import { updateScore, getScore } from '../../lib/db';
 import { DIFFICULTY } from '../../lib/constants';
+import { getGameState, saveGameState, updateScore } from '../lib/db';
 
 export const config = {
   runtime: 'edge',
 };
 
-export default async function handler(req) {
+export default async function handler(req, res) {
   const url = new URL(req.url);
   const fid = url.searchParams.get('fid');
   const difficulty = url.searchParams.get('difficulty') || 'NOVICE';
@@ -58,7 +59,41 @@ if (elapsed > timeLimit) {
     </html>
   `);
 }
+   let gameState = await getGameState(fid) || {
+    score: 0,
+    difficulty: 'NOVICE',
+    currentQuestion: null
+  };
   
+  // Process answer using existing game logic
+  if (gameState.currentQuestion) {
+    // This uses your existing game logic
+    const isCorrect = checkAnswer(
+      gameState.currentQuestion, 
+      ['+', '-', '×'][buttonIndex - 2]
+    );
+    
+    if (isCorrect) {
+      // Calculate points with difficulty multiplier
+      const multiplier = DIFFICULTY[gameState.difficulty].scoreMultiplier;
+      const points = 10 * multiplier;
+      gameState.score += points;
+      
+      // Update leaderboard in Redis
+      await updateScore(fid, gameState.score);
+    }
+  }
+  
+  // Generate new question using existing logic
+  gameState.currentQuestion = generateQuestion(gameState.difficulty);
+  
+  // Save updated state to Redis
+  await saveGameState(fid, gameState);
+  
+  // Return next frame (UNCHANGED)
+  res.status(200).json({
+    frame: generateFrame(fid, gameState.currentQuestion, gameState.score),
+  });
   // Prepare response
   const html = `
     <!DOCTYPE html>
