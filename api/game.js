@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getConfig } from '../../lib/config';
-import { clearTimer, startTimer } from '../../lib/timekeeper';
-import { updateScore, getScore } from '../../lib/db';
+import { getConfig } from '../lib/config';
+import { clearTimer, startTimer } from '../lib/timekeeper';
+import { updateScore, getScore } from '../lib/db';
 const { getGameState, saveGameState, updateScore } = require('../lib/db');
 const { generateQuestion, checkAnswer } = require('../lib/gameLogic');
 const { DIFFICULTY } = require('../lib/constants');
