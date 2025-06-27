@@ -13,7 +13,7 @@ Test your mental math skills under pressure with 3 difficulty levels:
 - Three difficulty levels (Padawan, Jedi Knight, Jedi Master)
 - Live leaderboard with Vercel KV
 - Time-pressured math challenges
-- Social score sharing
+- Social score sharing in farcast
 
 ## Local Development
 ```bash
