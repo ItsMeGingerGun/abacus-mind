@@ -8,7 +8,7 @@ export const config = {
   runtime: 'edge',
 };
 
-export default async function handler(req) {
+export default async function handler(req, res) {
   try {
     const url = new URL(req.url);
     const fid = url.searchParams.get('fid');
