@@ -45,7 +45,8 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 0;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         
         .logo {
@@ -83,6 +84,7 @@
             cursor: pointer;
             transition: var(--transition);
             box-shadow: var(--shadow);
+            font-size: 1rem;
         }
         
         .btn:hover {
@@ -101,243 +103,344 @@
             color: white;
         }
         
-        .hero {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 60px 20px;
-            background: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            margin-bottom: 60px;
+        .btn-success {
+            background: var(--success);
         }
         
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            color: var(--secondary);
-            line-height: 1.2;
+        .btn-warning {
+            background: var(--warning);
         }
         
-        .hero p {
-            font-size: 1.25rem;
-            max-width: 700px;
-            margin-bottom: 40px;
-            color: #555;
+        .btn-danger {
+            background: var(--danger);
         }
         
-        .features {
+        .main-layout {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: 1fr;
             gap: 30px;
-            margin-bottom: 60px;
         }
         
-        .feature-card {
+        @media (min-width: 992px) {
+            .main-layout {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+        
+        .panel {
             background: white;
             border-radius: var(--border-radius);
             padding: 30px;
             box-shadow: var(--shadow);
-            transition: var(--transition);
-            text-align: center;
+            margin-bottom: 30px;
         }
         
-        .feature-card:hover {
-            transform: translateY(-10px);
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f4ff;
         }
         
-        .feature-card i {
-            font-size: 48px;
-            margin-bottom: 20px;
-            color: var(--primary);
-        }
-        
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
+        .panel-title {
+            font-size: 1.8rem;
             color: var(--secondary);
+            font-weight: 700;
         }
         
-        .difficulty {
-            margin-bottom: 60px;
+        /* Game area styles */
+        .game-area {
+            position: relative;
+            min-height: 300px;
         }
         
-        .difficulty h2 {
+        .difficulty-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .difficulty-btn {
+            flex: 1;
+            min-width: 100px;
             text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 40px;
-            color: var(--secondary);
-        }
-        
-        .levels {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        
-        .level-card {
-            background: white;
+            padding: 12px;
             border-radius: var(--border-radius);
-            padding: 40px 30px;
-            box-shadow: var(--shadow);
-            text-align: center;
-            border-top: 6px solid var(--primary);
-        }
-        
-        .level-card.easy {
-            border-top-color: var(--success);
-        }
-        
-        .level-card.medium {
-            border-top-color: var(--warning);
-        }
-        
-        .level-card.hard {
-            border-top-color: var(--danger);
-        }
-        
-        .level-card h3 {
-            font-size: 1.75rem;
-            margin-bottom: 15px;
-        }
-        
-        .level-card .badge {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 30px;
-            font-size: 0.9rem;
             font-weight: 600;
-            margin-bottom: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            background: #f0f4ff;
+            border: 2px solid transparent;
         }
         
-        .level-card.easy .badge {
-            background: rgba(74, 222, 128, 0.2);
-            color: #15803d;
+        .difficulty-btn.active {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
         }
         
-        .level-card.medium .badge {
-            background: rgba(245, 158, 11, 0.2);
-            color: #b45309;
+        .difficulty-btn.easy.active {
+            border-color: var(--success);
+            background: rgba(74, 222, 128, 0.1);
         }
         
-        .level-card.hard .badge {
-            background: rgba(239, 68, 68, 0.2);
-            color: #b91c1c;
+        .difficulty-btn.medium.active {
+            border-color: var(--warning);
+            background: rgba(245, 158, 11, 0.1);
         }
         
-        .leaderboard {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 40px;
-            box-shadow: var(--shadow);
-            margin-bottom: 60px;
+        .difficulty-btn.hard.active {
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
         }
         
-        .leaderboard h2 {
+        .game-display {
             text-align: center;
-            font-size: 2.5rem;
+            margin: 30px 0;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .puzzle {
+            font-size: 3.5rem;
+            font-weight: 700;
             margin-bottom: 30px;
             color: var(--secondary);
         }
         
-        .leaderboard-table {
-            width: 100%;
-            border-collapse: collapse;
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
         }
         
-        .leaderboard-table th,
-        .leaderboard-table td {
+        @media (min-width: 768px) {
+            .options-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .option-btn {
+            padding: 20px 10px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .option-btn:hover {
+            background: #e9ecef;
+            transform: translateY(-3px);
+        }
+        
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f4ff;
+        }
+        
+        .stat-box {
+            text-align: center;
             padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            flex: 1;
+            margin: 0 10px;
         }
         
-        .leaderboard-table th {
-            font-weight: 600;
-            color: var(--secondary);
-        }
-        
-        .leaderboard-table tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .leaderboard-table .rank {
+        .stat-value {
+            font-size: 2rem;
             font-weight: 700;
             color: var(--primary);
-            width: 60px;
         }
         
-        .leaderboard-table .user {
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        /* Leaderboard styles */
+        .leaderboard-list {
+            list-style: none;
+        }
+        
+        .leaderboard-item {
             display: flex;
             align-items: center;
-            gap: 12px;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 12px;
+            background: #f8f9fa;
+            transition: var(--transition);
         }
         
-        .leaderboard-table .avatar {
+        .leaderboard-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .leaderboard-rank {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .leaderboard-user {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+        
+        .leaderboard-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: var(--accent);
+            background: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 600;
+            margin-right: 15px;
         }
         
-        .cta-section {
+        .leaderboard-score {
+            font-weight: 700;
+            color: var(--secondary);
+            min-width: 60px;
+            text-align: right;
+        }
+        
+        /* Auth panel */
+        .auth-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            padding: 60px 20px;
-            background: var(--primary);
-            border-radius: var(--border-radius);
-            margin-bottom: 60px;
-            color: white;
+            padding: 40px 20px;
         }
         
-        .cta-section h2 {
-            font-size: 2.5rem;
+        .auth-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
             margin-bottom: 20px;
         }
         
-        .cta-section p {
-            max-width: 700px;
-            margin: 0 auto 40px;
-            font-size: 1.25rem;
-            opacity: 0.9;
+        .auth-message {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #555;
         }
         
-        .btn-light {
+        /* Result modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
             background: white;
-            color: var(--primary);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            animation: modalAppear 0.5s ease;
         }
         
-        .btn-light:hover {
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--secondary);
+        @keyframes modalAppear {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         
+        .modal-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .modal-icon.correct {
+            color: var(--success);
+        }
+        
+        .modal-icon.incorrect {
+            color: var(--danger);
+        }
+        
+        .modal-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .modal-message {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #555;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6c757d;
+        }
+        
+        /* Footer */
         footer {
             text-align: center;
             padding: 30px 0;
             color: #666;
-            border-top: 1px solid #eee;
+            margin-top: 30px;
+            border-top: 1px solid #e9ecef;
         }
         
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-            }
-            
-            .difficulty h2,
-            .leaderboard h2,
-            .cta-section h2 {
-                font-size: 2rem;
-            }
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s ease;
         }
     </style>
 </head>
@@ -348,173 +451,390 @@
                 <i class="fas fa-calculator"></i>
                 <span>Abacus Mind</span>
             </div>
-            <a href="#" class="btn">
-                <i class="fab fa-farcaster"></i>
-                Connect Farcaster
-            </a>
+            <div class="user-info">
+                <span id="username">Guest</span>
+                <button id="login-btn" class="btn">
+                    <i class="fab fa-farcaster"></i>
+                    Connect Farcaster
+                </button>
+            </div>
         </header>
         
-        <section class="hero">
-            <h1>Challenge Your Mind with Math Puzzles</h1>
-            <p>Test your arithmetic skills on Farcaster! Solve operator puzzles, compete with friends, and climb the leaderboard in this engaging math challenge game.</p>
-            <a href="#" class="btn">
-                <i class="fas fa-play"></i>
-                Start Playing
-            </a>
-        </section>
-        
-        <section class="features">
-            <div class="feature-card">
-                <i class="fas fa-brain"></i>
-                <h3>Mental Exercise</h3>
-                <p>Sharpen your arithmetic skills with carefully designed puzzles that challenge your problem-solving abilities.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fab fa-farcaster"></i>
-                <h3>Farcaster Login</h3>
-                <p>Connect with your Farcaster account to save your progress and compete with the community.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-trophy"></i>
-                <h3>Leaderboards</h3>
-                <p>Compete with players worldwide and see where you rank on our global leaderboard.</p>
-            </div>
-        </section>
-        
-        <section class="difficulty">
-            <h2>Choose Your Challenge</h2>
-            <div class="levels">
-                <div class="level-card easy">
-                    <h3>Beginner</h3>
-                    <div class="badge">Easy</div>
-                    <p>Perfect for warming up! Simple addition and subtraction problems to get you started.</p>
-                    <div class="example">
-                        <p>7 + 5 = ?</p>
-                        <p>12 - 4 = ?</p>
+        <div class="main-layout">
+            <div class="game-panel">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Math Challenge</h2>
+                        <div class="score-display">
+                            <span>Score: <strong id="current-score">0</strong></span>
+                        </div>
+                    </div>
+                    
+                    <div class="game-area">
+                        <div class="difficulty-selector">
+                            <div class="difficulty-btn easy active" data-level="easy">Easy</div>
+                            <div class="difficulty-btn medium" data-level="medium">Medium</div>
+                            <div class="difficulty-btn hard" data-level="hard">Hard</div>
+                        </div>
+                        
+                        <div class="game-display">
+                            <div class="puzzle" id="puzzle-display">7 + 5 = ?</div>
+                            
+                            <div class="options-grid">
+                                <button class="option-btn">12</button>
+                                <button class="option-btn">14</button>
+                                <button class="option-btn">11</button>
+                                <button class="option-btn">13</button>
+                            </div>
+                        </div>
+                        
+                        <div class="game-stats">
+                            <div class="stat-box">
+                                <div class="stat-value" id="correct-count">0</div>
+                                <div class="stat-label">Correct</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value" id="streak-count">0</div>
+                                <div class="stat-label">Streak</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value" id="total-count">0</div>
+                                <div class="stat-label">Total</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="level-card medium">
-                    <h3>Intermediate</h3>
-                    <div class="badge">Medium</div>
-                    <p>Challenge yourself with multiplication and more complex problems.</p>
-                    <div class="example">
-                        <p>8 × 6 = ?</p>
-                        <p>45 ÷ 9 = ?</p>
+                
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">How to Play</h2>
                     </div>
-                </div>
-                <div class="level-card hard">
-                    <h3>Expert</h3>
-                    <div class="badge">Hard</div>
-                    <p>For math masters! Complex problems with multiple operations that require strategic thinking.</p>
-                    <div class="example">
-                        <p>(12 × 4) - 8 = ?</p>
-                        <p>56 ÷ (7 + 1) = ?</p>
+                    <div class="instructions">
+                        <p>1. Select a difficulty level (Easy, Medium, Hard)</p>
+                        <p>2. Solve the math puzzle that appears</p>
+                        <p>3. Choose the correct answer from the options</p>
+                        <p>4. Earn points for each correct answer</p>
+                        <p>5. Higher difficulty levels earn more points</p>
+                        <p>6. Connect your Farcaster account to save your progress and appear on the leaderboard</p>
                     </div>
                 </div>
             </div>
-        </section>
-        
-        <section class="leaderboard">
-            <h2>Global Leaderboard</h2>
-            <table class="leaderboard-table">
-                <thead>
-                    <tr>
-                        <th class="rank">Rank</th>
-                        <th>Player</th>
-                        <th>Score</th>
-                        <th>Level</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="rank">1</td>
-                        <td class="user">
-                            <div class="avatar">ML</div>
-                            <div>MathLegend</div>
-                        </td>
-                        <td>1,850</td>
-                        <td>Expert</td>
-                    </tr>
-                    <tr>
-                        <td class="rank">2</td>
-                        <td class="user">
-                            <div class="avatar">CA</div>
-                            <div>CalcAddict</div>
-                        </td>
-                        <td>1,720</td>
-                        <td>Expert</td>
-                    </tr>
-                    <tr>
-                        <td class="rank">3</td>
-                        <td class="user">
-                            <div class="avatar">NP</div>
-                            <div>NumberNinja</div>
-                        </td>
-                        <td>1,540</td>
-                        <td>Expert</td>
-                    </tr>
-                    <tr>
-                        <td class="rank">4</td>
-                        <td class="user">
-                            <div class="avatar">WM</div>
-                            <div>WiseMath</div>
-                        </td>
-                        <td>1,230</td>
-                        <td>Intermediate</td>
-                    </tr>
-                    <tr>
-                        <td class="rank">5</td>
-                        <td class="user">
-                            <div class="avatar">QM</div>
-                            <div>QuickMind</div>
-                        </td>
-                        <td>1,150</td>
-                        <td>Intermediate</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-        
-        <section class="cta-section">
-            <h2>Ready to Challenge Your Mind?</h2>
-            <p>Join thousands of players testing their math skills daily. Connect with Farcaster and start playing now!</p>
-            <a href="#" class="btn btn-light">
-                <i class="fab fa-farcaster"></i>
-                Play with Farcaster
-            </a>
-        </section>
+            
+            <div class="sidebar">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Leaderboard</h2>
+                        <button class="btn btn-outline" id="refresh-leaderboard">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    
+                    <ul class="leaderboard-list" id="leaderboard">
+                        <li class="leaderboard-item">
+                            <div class="leaderboard-rank">1</div>
+                            <div class="leaderboard-user">
+                                <div class="leaderboard-avatar">ML</div>
+                                <div>MathLegend</div>
+                            </div>
+                            <div class="leaderboard-score">1850</div>
+                        </li>
+                        <li class="leaderboard-item">
+                            <div class="leaderboard-rank">2</div>
+                            <div class="leaderboard-user">
+                                <div class="leaderboard-avatar">CA</div>
+                                <div>CalcAddict</div>
+                            </div>
+                            <div class="leaderboard-score">1720</div>
+                        </li>
+                        <li class="leaderboard-item">
+                            <div class="leaderboard-rank">3</div>
+                            <div class="leaderboard-user">
+                                <div class="leaderboard-avatar">NP</div>
+                                <div>NumberNinja</div>
+                            </div>
+                            <div class="leaderboard-score">1540</div>
+                        </li>
+                        <li class="leaderboard-item">
+                            <div class="leaderboard-rank">4</div>
+                            <div class="leaderboard-user">
+                                <div class="leaderboard-avatar">WM</div>
+                                <div>WiseMath</div>
+                            </div>
+                            <div class="leaderboard-score">1230</div>
+                        </li>
+                        <li class="leaderboard-item">
+                            <div class="leaderboard-rank">5</div>
+                            <div class="leaderboard-user">
+                                <div class="leaderboard-avatar">QM</div>
+                                <div>QuickMind</div>
+                            </div>
+                            <div class="leaderboard-score">1150</div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="panel auth-panel" id="auth-panel">
+                    <div class="auth-icon">
+                        <i class="fab fa-farcaster"></i>
+                    </div>
+                    <h3>Connect to Farcaster</h3>
+                    <p class="auth-message">Log in with your Farcaster account to save your progress and compete on the leaderboard!</p>
+                    <button class="btn" id="connect-btn">
+                        <i class="fab fa-farcaster"></i>
+                        Connect Account
+                    </button>
+                </div>
+            </div>
+        </div>
         
         <footer>
             <p>© 2023 Abacus Mind - Math Puzzles on Farcaster. All rights reserved.</p>
         </footer>
     </div>
+    
+    <!-- Result Modal -->
+    <div class="modal" id="result-modal">
+        <div class="modal-content">
+            <button class="close-modal" id="close-modal">&times;</button>
+            <div class="modal-icon correct">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 class="modal-title">Correct!</h2>
+            <p class="modal-message">Great job! You earned 10 points.</p>
+            <button class="btn" id="next-puzzle">Next Puzzle</button>
+        </div>
+    </div>
 
     <script>
-        // Simple animation for the hero section
-        document.addEventListener('DOMContentLoaded', function() {
-            const hero = document.querySelector('.hero');
-            hero.style.opacity = '0';
-            hero.style.transform = 'translateY(20px)';
-            
-            setTimeout(() => {
-                hero.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-                hero.style.opacity = '1';
-                hero.style.transform = 'translateY(0)';
-            }, 300);
-            
-            // Feature card animations
-            const featureCards = document.querySelectorAll('.feature-card');
-            featureCards.forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
-                
-                setTimeout(() => {
-                    card.style.transition = `opacity 0.5s ease ${index * 0.2}s, transform 0.5s ease ${index * 0.2}s`;
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, 500 + index * 100);
+        // Game state
+        const gameState = {
+            score: 0,
+            correctCount: 0,
+            streak: 0,
+            totalCount: 0,
+            difficulty: 'easy',
+            currentPuzzle: null,
+            isLoggedIn: false,
+            username: 'Guest'
+        };
+        
+        // DOM Elements
+        const puzzleDisplay = document.getElementById('puzzle-display');
+        const scoreDisplay = document.getElementById('current-score');
+        const correctDisplay = document.getElementById('correct-count');
+        const streakDisplay = document.getElementById('streak-count');
+        const totalDisplay = document.getElementById('total-count');
+        const difficultyButtons = document.querySelectorAll('.difficulty-btn');
+        const optionButtons = document.querySelectorAll('.option-btn');
+        const leaderboardList = document.getElementById('leaderboard');
+        const authPanel = document.getElementById('auth-panel');
+        const loginBtn = document.getElementById('login-btn');
+        const connectBtn = document.getElementById('connect-btn');
+        const resultModal = document.getElementById('result-modal');
+        const nextPuzzleBtn = document.getElementById('next-puzzle');
+        const closeModalBtn = document.getElementById('close-modal');
+        const refreshLeaderboardBtn = document.getElementById('refresh-leaderboard');
+        const usernameDisplay = document.getElementById('username');
+        
+        // Initialize game
+        function initGame() {
+            updateStats();
+            generatePuzzle();
+            setupEventListeners();
+        }
+        
+        // Set up event listeners
+        function setupEventListeners() {
+            // Difficulty buttons
+            difficultyButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    difficultyButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    gameState.difficulty = button.dataset.level;
+                    generatePuzzle();
+                });
             });
-        });
+            
+            // Option buttons
+            optionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    checkAnswer(Number(button.textContent));
+                });
+            });
+            
+            // Login buttons
+            loginBtn.addEventListener('click', simulateLogin);
+            connectBtn.addEventListener('click', simulateLogin);
+            
+            // Modal buttons
+            nextPuzzleBtn.addEventListener('click', () => {
+                resultModal.style.display = 'none';
+                generatePuzzle();
+            });
+            
+            closeModalBtn.addEventListener('click', () => {
+                resultModal.style.display = 'none';
+            });
+            
+            // Refresh leaderboard
+            refreshLeaderboardBtn.addEventListener('click', refreshLeaderboard);
+        }
+        
+        // Generate a new puzzle
+        function generatePuzzle() {
+            // In a real implementation, this would fetch from your API
+            // For now, we'll simulate puzzle generation
+            
+            let a, b, op, question, answer;
+            
+            switch(gameState.difficulty) {
+                case 'easy':
+                    a = Math.floor(Math.random() * 10) + 1;
+                    b = Math.floor(Math.random() * 10) + 1;
+                    op = Math.random() > 0.5 ? '+' : '-';
+                    break;
+                case 'medium':
+                    a = Math.floor(Math.random() * 20) + 1;
+                    b = Math.floor(Math.random() * 10) + 1;
+                    op = ['+', '-', '×'][Math.floor(Math.random() * 3)];
+                    break;
+                case 'hard':
+                    a = Math.floor(Math.random() * 50) + 1;
+                    b = Math.floor(Math.random() * 20) + 1;
+                    op = ['+', '-', '×', '÷'][Math.floor(Math.random() * 4)];
+                    break;
+            }
+            
+            // Create question and answer
+            switch(op) {
+                case '+': 
+                    question = `${a} + ${b} = ?`;
+                    answer = a + b;
+                    break;
+                case '-':
+                    question = `${a} - ${b} = ?`;
+                    answer = a - b;
+                    break;
+                case '×':
+                    question = `${a} × ${b} = ?`;
+                    answer = a * b;
+                    break;
+                case '÷':
+                    // Ensure integer division
+                    const product = a * b;
+                    question = `${product} ÷ ${a} = ?`;
+                    answer = b;
+                    break;
+            }
+            
+            // Generate options
+            const options = [answer];
+            while(options.length < 4) {
+                const offset = Math.floor(Math.random() * 10) + 1;
+                const variant = answer + (Math.random() > 0.5 ? offset : -offset);
+                if(!options.includes(variant) && variant > 0) {
+                    options.push(variant);
+                }
+            }
+            
+            // Shuffle options
+            options.sort(() => Math.random() - 0.5);
+            
+            // Update display
+            puzzleDisplay.textContent = question;
+            optionButtons.forEach((button, index) => {
+                button.textContent = options[index];
+            });
+            
+            // Store current puzzle
+            gameState.currentPuzzle = { question, answer, options };
+        }
+        
+        // Check user's answer
+        function checkAnswer(userAnswer) {
+            gameState.totalCount++;
+            
+            const isCorrect = userAnswer === gameState.currentPuzzle.answer;
+            
+            if (isCorrect) {
+                gameState.correctCount++;
+                gameState.streak++;
+                
+                // Add points based on difficulty
+                const points = gameState.difficulty === 'easy' ? 10 : 
+                              gameState.difficulty === 'medium' ? 20 : 30;
+                
+                gameState.score += points;
+                
+                // Show success modal
+                document.querySelector('.modal-icon').className = 'modal-icon correct';
+                document.querySelector('.modal-icon i').className = 'fas fa-check-circle';
+                document.querySelector('.modal-title').textContent = 'Correct!';
+                document.querySelector('.modal-message').textContent = `Great job! You earned ${points} points.`;
+            } else {
+                gameState.streak = 0;
+                
+                // Show failure modal
+                document.querySelector('.modal-icon').className = 'modal-icon incorrect';
+                document.querySelector('.modal-icon i').className = 'fas fa-times-circle';
+                document.querySelector('.modal-title').textContent = 'Incorrect!';
+                document.querySelector('.modal-message').textContent = `The correct answer was ${gameState.currentPuzzle.answer}.`;
+            }
+            
+            updateStats();
+            resultModal.style.display = 'flex';
+        }
+        
+        // Update game stats display
+        function updateStats() {
+            scoreDisplay.textContent = gameState.score;
+            correctDisplay.textContent = gameState.correctCount;
+            streakDisplay.textContent = gameState.streak;
+            totalDisplay.textContent = gameState.totalCount;
+        }
+        
+        // Simulate Farcaster login
+        function simulateLogin() {
+            gameState.isLoggedIn = true;
+            gameState.username = 'MathMaster';
+            
+            // Update UI
+            usernameDisplay.textContent = gameState.username;
+            loginBtn.innerHTML = '<i class="fas fa-user"></i> Logout';
+            authPanel.style.display = 'none';
+            
+            // Change login button to logout
+            loginBtn.removeEventListener('click', simulateLogin);
+            loginBtn.addEventListener('click', logout);
+        }
+        
+        // Logout function
+        function logout() {
+            gameState.isLoggedIn = false;
+            gameState.username = 'Guest';
+            
+            // Update UI
+            usernameDisplay.textContent = gameState.username;
+            loginBtn.innerHTML = '<i class="fab fa-farcaster"></i> Connect Farcaster';
+            authPanel.style.display = 'flex';
+            
+            // Change logout button to login
+            loginBtn.removeEventListener('click', logout);
+            loginBtn.addEventListener('click', simulateLogin);
+        }
+        
+        // Refresh leaderboard
+        function refreshLeaderboard() {
+            // In a real implementation, this would fetch from your API
+            // For now, we'll simulate a refresh animation
+            refreshLeaderboardBtn.classList.add('pulse');
+            setTimeout(() => {
+                refreshLeaderboardBtn.classList.remove('pulse');
+            }, 500);
+        }
+        
+        // Initialize the game when page loads
+        document.addEventListener('DOMContentLoaded', initGame);
     </script>
 </body>
 </html>
