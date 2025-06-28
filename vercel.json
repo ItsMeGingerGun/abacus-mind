@@ -1,16 +1,20 @@
 {
-  "rewrites": [
+  "build": {
+    "env": {
+      "REDIS_URL": "$REDIS_URL",
+      "NEYNAR_API_KEY": "$NEYNAR_API_KEY",
+      "GAME_EXPIRATION": "300",
+      "LEADERBOARD_SIZE": "10"
+    }
+  },
+  "routes": [
     {
-      "source": "/api/game",
-      "destination": "/pages/api/game.js"
+      "src": "/api/(.*)",
+      "dest": "api/$1"
     },
     {
-      "source": "/api/leaderboard",
-      "destination": "/pages/api/leaderboard.js"
+      "src": "/(.*)",
+      "dest": "public/$1"
     }
-  ],
-  "env": {
-    "REDIS_URL": "@upstash-redis-url",
-    "NEYNAR_API_KEY": "@neynar-api-key"
-  }
+  ]
 }
