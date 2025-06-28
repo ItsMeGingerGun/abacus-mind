@@ -1,35 +1,16 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "pages/api/**/*.js",
-      "use": "@vercel/node"
-    }
-  ],
   "rewrites": [
     {
-      "source": "/",
-      "destination": "/public/index.html"
-    },
-    {
       "source": "/api/game",
-      "destination": "/api/game.js"
+      "destination": "/pages/api/game.js"
     },
     {
       "source": "/api/leaderboard",
       "destination": "/pages/api/leaderboard.js"
-    },
-    {
-      "source": "/api/frame",
-      "destination": "/pages/api/frame.js"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/public/index.html"
     }
-  ]
+  ],
+  "env": {
+    "REDIS_URL": "@upstash-redis-url",
+    "NEYNAR_API_KEY": "@neynar-api-key"
+  }
 }
