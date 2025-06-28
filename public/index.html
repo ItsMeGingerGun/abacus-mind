@@ -150,7 +150,6 @@
             font-weight: 700;
         }
         
-        /* Game area styles */
         .game-area {
             position: relative;
             min-height: 300px;
@@ -269,7 +268,6 @@
             font-size: 0.9rem;
         }
         
-        /* Leaderboard styles */
         .leaderboard-list {
             list-style: none;
         }
@@ -329,7 +327,6 @@
             text-align: right;
         }
         
-        /* Auth panel */
         .auth-panel {
             display: flex;
             flex-direction: column;
@@ -358,7 +355,6 @@
             color: #555;
         }
         
-        /* Result modal */
         .modal {
             display: none;
             position: fixed;
@@ -423,7 +419,6 @@
             color: #6c757d;
         }
         
-        /* Footer */
         footer {
             text-align: center;
             padding: 30px 0;
@@ -432,7 +427,6 @@
             border-top: 1px solid #e9ecef;
         }
         
-        /* Animations */
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -441,6 +435,22 @@
         
         .pulse {
             animation: pulse 0.5s ease;
+        }
+        
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -478,9 +488,10 @@
                         </div>
                         
                         <div class="game-display">
+                            <div class="loader" id="puzzle-loader"></div>
                             <div class="puzzle" id="puzzle-display">7 + 5 = ?</div>
                             
-                            <div class="options-grid">
+                            <div class="options-grid" id="options-container">
                                 <button class="option-btn">12</button>
                                 <button class="option-btn">14</button>
                                 <button class="option-btn">11</button>
@@ -620,12 +631,13 @@
         
         // DOM Elements
         const puzzleDisplay = document.getElementById('puzzle-display');
+        const puzzleLoader = document.getElementById('puzzle-loader');
+        const optionsContainer = document.getElementById('options-container');
         const scoreDisplay = document.getElementById('current-score');
         const correctDisplay = document.getElementById('correct-count');
         const streakDisplay = document.getElementById('streak-count');
         const totalDisplay = document.getElementById('total-count');
         const difficultyButtons = document.querySelectorAll('.difficulty-btn');
-        const optionButtons = document.querySelectorAll('.option-btn');
         const leaderboardList = document.getElementById('leaderboard');
         const authPanel = document.getElementById('auth-panel');
         const loginBtn = document.getElementById('login-btn');
@@ -641,6 +653,7 @@
             updateStats();
             generatePuzzle();
             setupEventListeners();
+            loadLeaderboard();
         }
         
         // Set up event listeners
@@ -652,13 +665,6 @@
                     button.classList.add('active');
                     gameState.difficulty = button.dataset.level;
                     generatePuzzle();
-                });
-            });
-            
-            // Option buttons
-            optionButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    checkAnswer(Number(button.textContent));
                 });
             });
             
@@ -677,112 +683,120 @@
             });
             
             // Refresh leaderboard
-            refreshLeaderboardBtn.addEventListener('click', refreshLeaderboard);
+            refreshLeaderboardBtn.addEventListener('click', loadLeaderboard);
         }
         
         // Generate a new puzzle
-        function generatePuzzle() {
-            // In a real implementation, this would fetch from your API
-            // For now, we'll simulate puzzle generation
-            
-            let a, b, op, question, answer;
-            
-            switch(gameState.difficulty) {
-                case 'easy':
-                    a = Math.floor(Math.random() * 10) + 1;
-                    b = Math.floor(Math.random() * 10) + 1;
-                    op = Math.random() > 0.5 ? '+' : '-';
-                    break;
-                case 'medium':
-                    a = Math.floor(Math.random() * 20) + 1;
-                    b = Math.floor(Math.random() * 10) + 1;
-                    op = ['+', '-', '×'][Math.floor(Math.random() * 3)];
-                    break;
-                case 'hard':
-                    a = Math.floor(Math.random() * 50) + 1;
-                    b = Math.floor(Math.random() * 20) + 1;
-                    op = ['+', '-', '×', '÷'][Math.floor(Math.random() * 4)];
-                    break;
-            }
-            
-            // Create question and answer
-            switch(op) {
-                case '+': 
-                    question = `${a} + ${b} = ?`;
-                    answer = a + b;
-                    break;
-                case '-':
-                    question = `${a} - ${b} = ?`;
-                    answer = a - b;
-                    break;
-                case '×':
-                    question = `${a} × ${b} = ?`;
-                    answer = a * b;
-                    break;
-                case '÷':
-                    // Ensure integer division
-                    const product = a * b;
-                    question = `${product} ÷ ${a} = ?`;
-                    answer = b;
-                    break;
-            }
-            
-            // Generate options
-            const options = [answer];
-            while(options.length < 4) {
-                const offset = Math.floor(Math.random() * 10) + 1;
-                const variant = answer + (Math.random() > 0.5 ? offset : -offset);
-                if(!options.includes(variant) && variant > 0) {
-                    options.push(variant);
+        async function generatePuzzle() {
+            try {
+                // Show loader
+                puzzleDisplay.style.display = 'none';
+                puzzleLoader.style.display = 'block';
+                optionsContainer.style.opacity = '0.5';
+                
+                // Call backend API to get puzzle
+                const response = await fetch('/api/game', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        difficulty: gameState.difficulty
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch puzzle');
                 }
+                
+                const data = await response.json();
+                
+                // Update UI
+                puzzleDisplay.textContent = data.puzzle.question;
+                
+                // Clear previous options
+                optionsContainer.innerHTML = '';
+                
+                // Create new option buttons
+                data.puzzle.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.className = 'option-btn';
+                    button.textContent = option;
+                    button.addEventListener('click', () => {
+                        checkAnswer(Number(option));
+                    });
+                    optionsContainer.appendChild(button);
+                });
+                
+                // Store current puzzle
+                gameState.currentPuzzle = data.puzzle;
+                
+                // Hide loader
+                puzzleDisplay.style.display = 'block';
+                puzzleLoader.style.display = 'none';
+                optionsContainer.style.opacity = '1';
+                
+            } catch (error) {
+                console.error('Error generating puzzle:', error);
+                puzzleDisplay.textContent = 'Failed to load puzzle. Please try again.';
+                puzzleLoader.style.display = 'none';
+                optionsContainer.style.opacity = '1';
             }
-            
-            // Shuffle options
-            options.sort(() => Math.random() - 0.5);
-            
-            // Update display
-            puzzleDisplay.textContent = question;
-            optionButtons.forEach((button, index) => {
-                button.textContent = options[index];
-            });
-            
-            // Store current puzzle
-            gameState.currentPuzzle = { question, answer, options };
         }
         
         // Check user's answer
-        function checkAnswer(userAnswer) {
-            gameState.totalCount++;
-            
-            const isCorrect = userAnswer === gameState.currentPuzzle.answer;
-            
-            if (isCorrect) {
-                gameState.correctCount++;
-                gameState.streak++;
+        async function checkAnswer(userAnswer) {
+            try {
+                gameState.totalCount++;
                 
-                // Add points based on difficulty
-                const points = gameState.difficulty === 'easy' ? 10 : 
-                              gameState.difficulty === 'medium' ? 20 : 30;
+                const response = await fetch('/api/game', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        answer: userAnswer
+                    })
+                });
                 
-                gameState.score += points;
+                if (!response.ok) {
+                    throw new Error('Failed to submit answer');
+                }
                 
-                // Show success modal
-                document.querySelector('.modal-icon').className = 'modal-icon correct';
-                document.querySelector('.modal-icon i').className = 'fas fa-check-circle';
-                document.querySelector('.modal-title').textContent = 'Correct!';
-                document.querySelector('.modal-message').textContent = `Great job! You earned ${points} points.`;
-            } else {
-                gameState.streak = 0;
+                const result = await response.json();
                 
-                // Show failure modal
-                document.querySelector('.modal-icon').className = 'modal-icon incorrect';
-                document.querySelector('.modal-icon i').className = 'fas fa-times-circle';
-                document.querySelector('.modal-title').textContent = 'Incorrect!';
-                document.querySelector('.modal-message').textContent = `The correct answer was ${gameState.currentPuzzle.answer}.`;
+                if (result.correct) {
+                    gameState.correctCount++;
+                    gameState.streak++;
+                    
+                    // Add points based on difficulty
+                    const points = gameState.difficulty === 'easy' ? 10 : 
+                                  gameState.difficulty === 'medium' ? 20 : 30;
+                    
+                    gameState.score += points;
+                    
+                    // Show success modal
+                    document.querySelector('.modal-icon').className = 'modal-icon correct';
+                    document.querySelector('.modal-icon i').className = 'fas fa-check-circle';
+                    document.querySelector('.modal-title').textContent = 'Correct!';
+                    document.querySelector('.modal-message').textContent = `Great job! You earned ${points} points.`;
+                } else {
+                    gameState.streak = 0;
+                    
+                    // Show failure modal
+                    document.querySelector('.modal-icon').className = 'modal-icon incorrect';
+                    document.querySelector('.modal-icon i').className = 'fas fa-times-circle';
+                    document.querySelector('.modal-title').textContent = 'Incorrect!';
+                    document.querySelector('.modal-message').textContent = `The correct answer was ${result.correctAnswer}.`;
+                }
+                
+                updateStats();
+                resultModal.style.display = 'flex';
+                
+            } catch (error) {
+                console.error('Error checking answer:', error);
+                alert('Failed to submit answer. Please try again.');
             }
-            
-            updateStats();
-            resultModal.style.display = 'flex';
         }
         
         // Update game stats display
@@ -791,6 +805,64 @@
             correctDisplay.textContent = gameState.correctCount;
             streakDisplay.textContent = gameState.streak;
             totalDisplay.textContent = gameState.totalCount;
+        }
+        
+        // Load leaderboard data
+        async function loadLeaderboard() {
+            try {
+                refreshLeaderboardBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                
+                const response = await fetch('/api/leaderboard');
+                if (!response.ok) {
+                    throw new Error('Failed to load leaderboard');
+                }
+                
+                const data = await response.json();
+                updateLeaderboardUI(data.leaderboard);
+                
+            } catch (error) {
+                console.error('Error loading leaderboard:', error);
+                leaderboardList.innerHTML = '<li class="leaderboard-item">Failed to load leaderboard</li>';
+            } finally {
+                refreshLeaderboardBtn.innerHTML = '<i class="fas fa-sync-alt"></i>';
+            }
+        }
+        
+        // Update leaderboard UI
+        function updateLeaderboardUI(leaderboardData) {
+            leaderboardList.innerHTML = '';
+            
+            leaderboardData.forEach((player, index) => {
+                const li = document.createElement('li');
+                li.className = 'leaderboard-item';
+                
+                const rank = document.createElement('div');
+                rank.className = 'leaderboard-rank';
+                rank.textContent = index + 1;
+                
+                const userDiv = document.createElement('div');
+                userDiv.className = 'leaderboard-user';
+                
+                const avatar = document.createElement('div');
+                avatar.className = 'leaderboard-avatar';
+                avatar.textContent = player.username.substring(0, 2).toUpperCase();
+                
+                const username = document.createElement('div');
+                username.textContent = player.username;
+                
+                const score = document.createElement('div');
+                score.className = 'leaderboard-score';
+                score.textContent = player.score;
+                
+                userDiv.appendChild(avatar);
+                userDiv.appendChild(username);
+                
+                li.appendChild(rank);
+                li.appendChild(userDiv);
+                li.appendChild(score);
+                
+                leaderboardList.appendChild(li);
+            });
         }
         
         // Simulate Farcaster login
@@ -823,18 +895,8 @@
             loginBtn.addEventListener('click', simulateLogin);
         }
         
-        // Refresh leaderboard
-        function refreshLeaderboard() {
-            // In a real implementation, this would fetch from your API
-            // For now, we'll simulate a refresh animation
-            refreshLeaderboardBtn.classList.add('pulse');
-            setTimeout(() => {
-                refreshLeaderboardBtn.classList.remove('pulse');
-            }, 500);
-        }
-        
         // Initialize the game when page loads
         document.addEventListener('DOMContentLoaded', initGame);
     </script>
 </body>
-</html>
+</html> 
