@@ -2,13 +2,9 @@
   "build": {
     "env": {
       "REDIS_URL": "$REDIS_URL",
-      "NEYNAR_API_KEY": "$NEYNAR_API_KEY",
-      "GAME_EXPIRATION": "300",
-      "LEADERBOARD_SIZE": "10"
+      "NEYNAR_API_KEY": "$NEYNAR_API_KEY"
     },
-    "scripts": {
-      "build": "./build.sh"
-    }
+    "use": "@vercel/node"
   },
   "routes": [
     {
