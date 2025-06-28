@@ -1,25 +1,23 @@
 {
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "public"
-      }
+  "build": {
+    "env": {
+      "REDIS_URL": "$REDIS_URL",
+      "NEYNAR_API_KEY": "$NEYNAR_API_KEY",
+      "GAME_EXPIRATION": "300",
+      "LEADERBOARD_SIZE": "10"
     },
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
+    "scripts": {
+      "build": "./build.sh"
     }
-  ],
+  },
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "server.js"
+      "dest": "/api/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "server.js"
+      "dest": "/public/$1"
     }
   ]
 }
