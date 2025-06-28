@@ -1,20 +1,18 @@
 {
-  "build": {
-    "env": {
-      "REDIS_URL": "$REDIS_URL",
-      "NEYNAR_API_KEY": "$NEYNAR_API_KEY",
-      "GAME_EXPIRATION": "300",
-      "LEADERBOARD_SIZE": "10"
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
     }
-  },
+  ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "api/$1"
+      "dest": "server.js"
     },
     {
       "src": "/(.*)",
-      "dest": "public/$1"
+      "dest": "server.js"
     }
   ]
 }
