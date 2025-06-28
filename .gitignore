@@ -1,11 +1,7 @@
 # Environment files
-.env
-.env.*
+.env*
 !.env.example
 
 # Sensitive files
 secrets.*
-config.json
-
-# Vercel
-.vercel
+config.local.*
