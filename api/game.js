@@ -1,22 +1,33 @@
 const { validateUser } = require('../../lib/neynar');
 const { generatePuzzle } = require('../../lib/game-logic');
 const { cachePuzzle, getPuzzle, updateLeaderboard } = require('../../lib/redis');
+const winston = require('winston');
 
 module.exports = async (req, res) => {
-  // Handle CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, PUT, OPTIONS');
-  
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  try {
+    // Handle CORS
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, PUT, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    
+    if (req.method === 'OPTIONS') {
+      return res.status(200).end();
+    }
 
-  if (req.method === 'POST') {
-    try {
+    if (req.method === 'POST') {
       const { signerUuid, difficulty = 'easy' } = req.body;
+      
+      if (!signerUuid) {
+        winston.warn('POST /api/game: Missing signerUuid');
+        return res.status(400).json({ error: 'Missing signerUuid' });
+      }
+      
       const user = await validateUser(signerUuid);
       
-      if (!user) return res.status(401).json({ error: 'Invalid Farcaster user' });
+      if (!user) {
+        winston.warn(`POST /api/game: Invalid user for signerUuid: ${signerUuid}`);
+        return res.status(401).json({ error: 'Invalid Farcaster user' });
+      }
 
       const puzzle = generatePuzzle(difficulty);
       await cachePuzzle(user.fid, puzzle);
@@ -26,21 +37,28 @@ module.exports = async (req, res) => {
         username: user.username,
         puzzle
       });
-    } catch (error) {
-      console.error('Game init error:', error);
-      return res.status(500).json({ error: 'Game initialization failed' });
-    }
-  } 
+    } 
 
-  if (req.method === 'PUT') {
-    try {
+    if (req.method === 'PUT') {
       const { signerUuid, answer } = req.body;
+      
+      if (!signerUuid || answer === undefined) {
+        winston.warn('PUT /api/game: Missing required fields');
+        return res.status(400).json({ error: 'Missing signerUuid or answer' });
+      }
+      
       const user = await validateUser(signerUuid);
       
-      if (!user) return res.status(401).json({ error: 'Invalid Farcaster user' });
+      if (!user) {
+        winston.warn(`PUT /api/game: Invalid user for signerUuid: ${signerUuid}`);
+        return res.status(401).json({ error: 'Invalid Farcaster user' });
+      }
 
       const puzzle = await getPuzzle(user.fid);
-      if (!puzzle) return res.status(404).json({ error: 'Puzzle expired or not found' });
+      if (!puzzle) {
+        winston.warn(`PUT /api/game: Puzzle not found for fid: ${user.fid}`);
+        return res.status(404).json({ error: 'Puzzle expired or not found' });
+      }
       
       const isCorrect = Number(answer) === puzzle.answer;
       
@@ -53,11 +71,12 @@ module.exports = async (req, res) => {
         correct: isCorrect,
         correctAnswer: puzzle.answer
       });
-    } catch (error) {
-      console.error('Answer processing error:', error);
-      return res.status(500).json({ error: 'Answer processing failed' });
     }
-  }
 
-  return res.status(405).end();
+    return res.status(405).end();
+  } catch (error) {
+    winston.error(`API Error in /api/game: ${error.message}`);
+    winston.error(error.stack);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
 };
