@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public'), {
   index: 'index.html'
-});
+}));
 
 // API routes
 app.use('/api/game', require('./api/game'));
@@ -42,7 +42,7 @@ app.use('/api/leaderboard', require('./api/leaderboard'));
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   const redisStatus = redisClient.isReady ? 'connected' : 'disconnected';
-  
+
   res.status(200).json({
     status: 'ok',
     redis: redisStatus,
