@@ -1,13 +1,13 @@
+// Corrected server.js file
 require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
 const cors = require('cors');
 const winston = require('winston');
-
 const { client: redisClient } = require('./lib/redis');
 
-// Logger setup
+// Logger configuration
 const logger = winston.createLogger({
   level: 'debug',
   format: winston.format.combine(
@@ -30,49 +30,16 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve static files from public directory
+// Serve static files
 app.use(express.static(path.join(__dirname, 'public'), {
   index: 'index.html'
 });
-
 
 // API routes
 app.use('/api/game', require('./api/game'));
 app.use('/api/leaderboard', require('./api/leaderboard'));
 
-// Handle all other routes by serving index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './public', 'index.html'));
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  logger.error(`Server Error: ${err.message}`);
-  logger.error(err.stack);
-  res.status(500).json({ error: 'Internal server error' });
-});
-
-// Serve static files - FIXED PATH
-app.use(express.static(path.join(__dirname, 'public'), {
-  index: 'index.html'
-});
-
-
-// Log all requests
-app.use((req, res, next) => {
-  logger.info(`${req.method} ${req.url}`);
-  next();
-});
-
-// Start server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  logger.info(`Server running on port ${PORT}`);
-  logger.info(`Redis URL: ${process.env.REDIS_URL ? 'Set' : 'Missing'}`);
-  logger.info(`Neynar API Key: ${process.env.NEYNAR_API_KEY ? 'Set' : 'Missing'}`);
-});
-
-/ Health check endpoint - NOW WORKS
+// Health check endpoint
 app.get('/api/health', (req, res) => {
   const redisStatus = redisClient.isReady ? 'connected' : 'disconnected';
   
@@ -86,8 +53,22 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Add this above other routes
-app.use('/api/health', require('./api/health'));
+// Handle all other routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
-// Export for Vercel
+// Error handling
+app.use((err, req, res, next) => {
+  logger.error(`Server Error: ${err.message}`, { stack: err.stack });
+  res.status(500).json({ error: 'Internal server error' });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  logger.info(`Server running on port ${PORT}`);
+  logger.info(`Redis URL: ${process.env.REDIS_URL ? 'Set' : 'Missing'}`);
+  logger.info(`Neynar API Key: ${process.env.NEYNAR_API_KEY ? 'Set' : 'Missing'}`);
+});
+
 module.exports = app;
