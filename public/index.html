@@ -719,13 +719,14 @@
                 puzzleLoader.style.display = 'block';
                 optionsContainer.style.opacity = '0.5';
                 
-                // Call backend API to get puzzle
+                // Call backend API to get puzzle (with demo signerUuid)
                 const response = await fetch('/api/game', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        signerUuid: 'demo-user-123',
                         difficulty: gameState.difficulty
                     })
                 });
@@ -780,6 +781,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        signerUuid: 'demo-user-123',
                         answer: userAnswer
                     })
                 });
