@@ -1,13 +1,11 @@
-// Corrected server.js file
 require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
 const cors = require('cors');
 const winston = require('winston');
-const { client: redisClient } = require('./lib/redis');
 
-// Logger configuration
+// Logger setup
 const logger = winston.createLogger({
   level: 'debug',
   format: winston.format.combine(
@@ -30,45 +28,38 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve static files
+// Serve static files from public directory
 app.use(express.static(path.join(__dirname, 'public'), {
   index: 'index.html'
-}));
+});
+
 
 // API routes
 app.use('/api/game', require('./api/game'));
 app.use('/api/leaderboard', require('./api/leaderboard'));
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  const redisStatus = redisClient.isReady ? 'connected' : 'disconnected';
-
-  res.status(200).json({
-    status: 'ok',
-    redis: redisStatus,
-    environment: {
-      REDIS_URL: !!process.env.REDIS_URL,
-      NEYNAR_API_KEY: !!process.env.NEYNAR_API_KEY
-    }
-  });
-});
-
-// Handle all other routes
+// Handle all other routes by serving index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, './public', 'index.html'));
 });
 
-// Error handling
+// Error handling middleware
 app.use((err, req, res, next) => {
-  logger.error(`Server Error: ${err.message}`, { stack: err.stack });
+  logger.error(`Server Error: ${err.message}`);
+  logger.error(err.stack);
   res.status(500).json({ error: 'Internal server error' });
 });
 
+// Start server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
   logger.info(`Server running on port ${PORT}`);
   logger.info(`Redis URL: ${process.env.REDIS_URL ? 'Set' : 'Missing'}`);
   logger.info(`Neynar API Key: ${process.env.NEYNAR_API_KEY ? 'Set' : 'Missing'}`);
 });
 
+// Add this above other routes
+app.use('/api/health', require('./api/health'));
+
+// Export for Vercel
 module.exports = app;
