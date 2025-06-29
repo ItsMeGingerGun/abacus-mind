@@ -1,23 +1,38 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
 const cors = require('cors');
 const winston = require('winston');
+
+// Logger setup
 const logger = winston.createLogger({
   level: 'debug',
-  format: winston.format.json(),
-  transports: [
-    new winston.transports.Console({
-      format: winston.format.simple(),
-    })
-  ]
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [new winston.transports.Console()]
 });
+
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'OPTIONS']
+}));
 app.use(express.json());
 
+// Log all requests
+app.use((req, res, next) => {
+  logger.info(`${req.method} ${req.url}`);
+  next();
+});
+
 // Serve static files from public directory
-app.use(express.static(path.join(__dirname, './public')));
+app.use(express.static(path.join(__dirname, 'public'), {
+  index: 'index.html'
+});
+
 
 // API routes
 app.use('/api/game', require('./api/game'));
