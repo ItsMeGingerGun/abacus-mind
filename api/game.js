@@ -33,7 +33,7 @@ module.exports = async (req, res) => {
       const user = await validateUser(signerUuid);
 
       if (!user) {
-        winston.warn(`POST /api/game: Invalid user for signerUuid: ${signerUuid}`);
+        logger.warn(`POST /api/game: Invalid user for signerUuid: ${signerUuid}`);
         return res.status(401).json({ error: 'Invalid Farcaster user' });
       }
 
@@ -51,20 +51,20 @@ module.exports = async (req, res) => {
       const { signerUuid, answer } = req.body;
       
       if (!signerUuid || answer === undefined) {
-        winston.warn('PUT /api/game: Missing required fields');
+        logger.warn('PUT /api/game: Missing required fields');
         return res.status(400).json({ error: 'Missing signerUuid or answer' });
       }
       
       const user = await validateUser(signerUuid);
       
       if (!user) {
-        winston.warn(`PUT /api/game: Invalid user for signerUuid: ${signerUuid}`);
+        logger.warn(`PUT /api/game: Invalid user for signerUuid: ${signerUuid}`);
         return res.status(401).json({ error: 'Invalid Farcaster user' });
       }
 
       const puzzle = await getPuzzle(user.fid);
       if (!puzzle) {
-        winston.warn(`PUT /api/game: Puzzle not found for fid: ${user.fid}`);
+        logger.warn(`PUT /api/game: Puzzle not found for fid: ${user.fid}`);
         return res.status(404).json({ error: 'Puzzle expired or not found' });
       }
       
