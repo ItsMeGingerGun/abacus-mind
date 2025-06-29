@@ -1,6 +1,6 @@
-const { validateUser } = require('../../lib/neynar');
-const { generatePuzzle } = require('../../lib/game-logic');
-const { cachePuzzle, getPuzzle, updateLeaderboard } = require('../../lib/redis');
+onst { validateUser } = require('../lib/neynar');
+const { generatePuzzle } = require('../lib/game-logic');
+const { cachePuzzle, getPuzzle, updateLeaderboard } = require('../lib/redis');
 const winston = require('winston');
 
 const logger = winston.createLogger({
