@@ -3,14 +3,22 @@ const { generatePuzzle } = require('../../lib/game-logic');
 const { cachePuzzle, getPuzzle, updateLeaderboard } = require('../../lib/redis');
 const winston = require('winston');
 
+const logger = winston.createLogger({
+  level: 'debug',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [new winston.transports.Console()]
+});
+
 module.exports = async (req, res) => {
   try {
-    // Handle CORS
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, PUT, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    
+    // Handle preflight requests
     if (req.method === 'OPTIONS') {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'POST, PUT, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
       return res.status(200).end();
     }
 
@@ -18,12 +26,12 @@ module.exports = async (req, res) => {
       const { signerUuid, difficulty = 'easy' } = req.body;
       
       if (!signerUuid) {
-        winston.warn('POST /api/game: Missing signerUuid');
+        logger.warn('Missing signerUuid in POST /api/game');
         return res.status(400).json({ error: 'Missing signerUuid' });
       }
       
       const user = await validateUser(signerUuid);
-      
+
       if (!user) {
         winston.warn(`POST /api/game: Invalid user for signerUuid: ${signerUuid}`);
         return res.status(401).json({ error: 'Invalid Farcaster user' });
@@ -73,10 +81,9 @@ module.exports = async (req, res) => {
       });
     }
 
-    return res.status(405).end();
+      return res.status(405).json({ error: 'Method not allowed' });
   } catch (error) {
-    winston.error(`API Error in /api/game: ${error.message}`);
-    winston.error(error.stack);
+    logger.error(`API Error in /api/game: ${error.message}`, { stack: error.stack });
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
