@@ -5,6 +5,8 @@ const path = require('path');
 const cors = require('cors');
 const winston = require('winston');
 
+const { client: redisClient } = require('./lib/redis');
+
 // Logger setup
 const logger = winston.createLogger({
   level: 'debug',
@@ -50,12 +52,38 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
+// Serve static files - FIXED PATH
+app.use(express.static(path.join(__dirname, 'public'), {
+  index: 'index.html'
+});
+
+
+// Log all requests
+app.use((req, res, next) => {
+  logger.info(`${req.method} ${req.url}`);
+  next();
+});
+
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   logger.info(`Server running on port ${PORT}`);
   logger.info(`Redis URL: ${process.env.REDIS_URL ? 'Set' : 'Missing'}`);
   logger.info(`Neynar API Key: ${process.env.NEYNAR_API_KEY ? 'Set' : 'Missing'}`);
+});
+
+/ Health check endpoint - NOW WORKS
+app.get('/api/health', (req, res) => {
+  const redisStatus = redisClient.isReady ? 'connected' : 'disconnected';
+  
+  res.status(200).json({
+    status: 'ok',
+    redis: redisStatus,
+    environment: {
+      REDIS_URL: !!process.env.REDIS_URL,
+      NEYNAR_API_KEY: !!process.env.NEYNAR_API_KEY
+    }
+  });
 });
 
 // Add this above other routes
