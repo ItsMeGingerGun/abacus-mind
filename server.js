@@ -1,11 +1,10 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const cors = require('cors'); // Add this
+const cors = require('cors');
 
-app.use(cors()); // Enable CORS
-
-// Middleware to parse JSON bodies
+// Middleware
+app.use(cors());
 app.use(express.json());
 
 // Serve static files from public directory
