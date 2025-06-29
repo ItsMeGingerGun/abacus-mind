@@ -489,6 +489,31 @@
                         
                         <div class="game-display">
                             <div class="loader" id="puzzle-loader"></div>
+                            
+                            <div class="puzzle-container" id="puzzle-container" style="display: none;">
+                                <div class="puzzle-question">
+                                    <h3 id="puzzle-text">Loading puzzle...</h3>
+                                </div>
+                                
+                                <div class="timer-bar">
+                                    <div class="timer-fill" id="timer-fill"></div>
+                                    <span class="timer-text" id="timer-text">30s</span>
+                                </div>
+                                
+                                <div class="options-grid" id="options-grid">
+                                    <!-- Options will be dynamically generated -->
+                                </div>
+                                
+                                <div class="puzzle-info">
+                                    <span class="difficulty-badge" id="difficulty-badge">Easy</span>
+                                    <span class="points-info" id="points-info">10 points</span>
+                                </div>
+                            </div>
+                            
+                            <div class="game-controls">
+                                <button class="btn primary" id="start-game">Start New Puzzle</button>
+                                <button class="btn secondary" id="skip-puzzle" style="display: none;">Skip Puzzle</button>
+                            </div>
                             <div class="puzzle" id="puzzle-display">7 + 5 = ?</div>
                             
                             <div class="options-grid" id="options-container">
