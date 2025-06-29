@@ -17,7 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 // Serve static files from public directory
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, './public')));
 
 // API routes
 app.use('/api/game', require('./api/game'));
@@ -25,7 +25,7 @@ app.use('/api/leaderboard', require('./api/leaderboard'));
 
 // Handle all other routes by serving index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, './public', 'index.html'));
 });
 
 // Error handling middleware
