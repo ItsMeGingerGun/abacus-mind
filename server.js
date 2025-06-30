@@ -28,7 +28,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve static files from public directory
+// Serve static files from public directory with root 
 app.use(express.static(path.join(__dirname, './public'), {
   index: 'index.html'
 });
